@@ -101,7 +101,12 @@ def get_iv(i, v, t, out, debug=True):
     for i_step, t_step in enumerate([1.0, 0.5, 1.0]):
         i_step = i_step - 3
         t_f = t_i + t_step
-        i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2, debug=(debugdir, i_step))
+        if i_step == -3:
+            i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, 1. - t_skip_2,
+                    debug=(debugdir, i_step))
+        else:
+            i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2,
+                    debug=(debugdir, i_step))
         if np.isfinite(tau_i):
             print(i_step, tau_i)
         time_window = np.where(np.logical_and(t > t_i, t <= t_f))[0]
