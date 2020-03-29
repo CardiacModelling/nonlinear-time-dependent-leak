@@ -121,5 +121,7 @@ axes[-1, 1].set_xlabel('Voltage (mV)', fontsize=12)
 plt.subplots_adjust(top=0.975, bottom=0.1, right=0.975, left=0.075)
 plt.savefig('%s/patch-auto.png' % savedir, bbox_inches='tight', pad_inches=0,
         dpi=200)
+plt.savefig('%s/patch-auto.pdf' % savedir, bbox_inches='tight', pad_inches=0,
+        format='pdf')
 
 print('Done')
