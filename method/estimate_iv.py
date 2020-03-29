@@ -1,4 +1,7 @@
-#!/usr/bin/env python2
+"""
+Estimation of the time constant and steady-state I-V relationship for the
+staircase protocol.
+"""
 from __future__ import print_function
 import sys
 sys.path.append('../lib/')
@@ -9,11 +12,36 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from scipy import stats
 
+Dt = 500e-3  # s
+t_start = 3.4  # s
+t_skip = 5e-3  # s
+t_skip_2 = 5e-3  # s
+n_steps = 19
+fit_method = fit_single_exp
+
+
 def fit_single_exp(current, times,
                        t_start, t_end,
                        t_trim, t_fit_until,
                        debug=None):
-    # Use 2-parameters exponential fit to the tail
+    """
+    Fitting a 3-parameter single exponential to the tail current.
+
+    Input
+    =====
+    - current: (array) Current time series
+    - times: (array) Time points of `current`
+    - t_start: (float) Starting time of the tail current
+    - t_end: (float) Ending time of the tail current
+    - t_trim: (float) Duration of the beginning of the current not to be fitted
+    - t_fit_until: (float) Duration of the time series to be fitted
+    - debug: (optional, (str, int)) Output debug plots if not `None`, expect
+             the output folder name and the number of step of the tail current
+
+    Output
+    =====
+    - (i, tau): The steady state current of tail current, and its time constant
+    """
     from scipy.optimize import curve_fit
     def exp_func(t, a, b, c):
         # do a "proper exponential" decay fit
@@ -65,14 +93,24 @@ def fit_single_exp(current, times,
     return out, tau
 
 
-Dt = 500e-3  # s
-t_start = 3.4  # s
-t_skip = 5e-3  # s
-t_skip_2 = 5e-3  # s
-n_steps = 19
-fit_method = fit_single_exp
-
 def get_iv(i, v, t, out, debug=True):
+    """
+    Estimate the I-V relationship using the staircase protocol recording.
+
+    Input
+    =====
+    - i: (array) Recorded current
+    - v: (array) Voltage protocol
+    - t: (array) Time points of the recording
+    - out: (str) Output folder name which will be created in `../out`
+    - debug: (optional, bool) Create debug plots if True
+
+    Output
+    =====
+    - (i_s, v_s, tau_s): current of the IV curve, voltage of the IV curve, and
+                         time constant of the tau-V curve
+    All results are saved in `../out/[out]` directory.
+    """
     outdir = './out/' + out
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
@@ -117,7 +155,8 @@ def get_iv(i, v, t, out, debug=True):
     # staircase
     for i_step in range(n_steps):
         t_i, t_f = t_start + i_step * Dt, t_start + (i_step + 1) * Dt
-        i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2, debug=(debugdir, i_step))
+        i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2,
+                debug=(debugdir, i_step))
         if np.isfinite(tau_i):
             print(i_step, tau_i)
         time_window = np.where(np.logical_and(t > t_i, t <= t_f))[0]
@@ -129,7 +168,8 @@ def get_iv(i, v, t, out, debug=True):
     for i_step, t_step in enumerate([1.0, 0.5]):
         i_step = i_step + n_steps
         t_f = t_i + t_step
-        i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2, debug=(debugdir, i_step))
+        i_i, tau_i = fit_method(i, t, t_i, t_f, t_skip, Dt - t_skip_2,
+                debug=(debugdir, i_step))
         if np.isfinite(tau_i):
             print(i_step, tau_i)
         time_window = np.where(np.logical_and(t > t_i, t <= t_f))[0]
