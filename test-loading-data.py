@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+sys.path.append('method')
 import os
 import numpy as np
 import matplotlib

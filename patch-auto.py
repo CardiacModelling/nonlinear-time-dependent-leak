@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+sys.path.append('method')
 import os
 import numpy as np
 import matplotlib
@@ -36,7 +38,8 @@ i1 = np.loadtxt(f1, delimiter=',', skiprows=1)
 i2 = np.loadtxt(f2, delimiter=',', skiprows=1)
 i3 = np.loadtxt(f3, delimiter=',', skiprows=1)
 
-v = np.loadtxt('protocol-staircaseramp.csv', delimiter=',', skiprows=1)[::2, 1]
+v = np.loadtxt('data/protocol-staircaseramp.csv', delimiter=',',
+        skiprows=1)[::2, 1]
 
 traces1 = [i1, v]
 traces2 = [i2, v]

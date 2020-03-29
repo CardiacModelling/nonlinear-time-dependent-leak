@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+sys.path.append('method')
 import os
 import numpy as np
 import matplotlib
@@ -64,11 +66,12 @@ traces1, times1 = load(f1, idx1)
 traces2, times2 = load(f2, idx2)
 traces3, times3 = load(f3, idx3)
 
-i1 = traces1[0] * 1e12
-i2 = traces2[0] * 1e12
-i3 = traces3[0] * 1e12
+i1 = traces1[0] * 1e12  # A -> pA
+i2 = traces2[0] * 1e12  # A -> pA
+i3 = traces3[0] * 1e12  # A -> pA
 
-v = np.loadtxt('protocol-staircaseramp.csv', delimiter=',', skiprows=1)[:, 1]
+v = np.loadtxt('data/protocol-staircaseramp.csv', delimiter=',',
+        skiprows=1)[:, 1]
 
 i1 = i1[::2]
 t1 = times1[::2]
