@@ -100,6 +100,8 @@ axes[1, 0].plot(times1, compute_leak(traces1) * 1e12, c='C1', ls='--')
 axes[1, 0].set_ylim([-300, 400])
 axes[1, 0].set_xlim([t1[0], t1[-1]])
 axes[1, 0].set_xticks([])
+axes[1, 0].text(-0.125, 0.85, '(I)', transform=axes[1, 0].transAxes, size=12,
+        weight='bold')
 
 axes[2, 0] = fig.add_subplot(grid[3:5, :3])
 axes[2, 0].plot(times2, traces2[0] * 1e12, c='C0')
@@ -108,6 +110,8 @@ axes[2, 0].plot(times2, compute_leak(traces2,
 axes[2, 0].set_ylim([-400, 210])
 axes[2, 0].set_xlim([t2[0], t2[-1]])
 axes[2, 0].set_xticks([])
+axes[2, 0].text(-0.125, 0.85, '(II)', transform=axes[2, 0].transAxes, size=12,
+        weight='bold')
 
 axes[3, 0] = fig.add_subplot(grid[5:7, :3])
 axes[3, 0].plot(times3, traces3[0] * 1e12, c='C0')
@@ -115,6 +119,8 @@ axes[3, 0].plot(times3, compute_leak(traces3) * 1e12, c='C1', ls='--')
 axes[3, 0].set_ylim([-1700, 800])
 #axes[3, 0].set_ylim([-1500, 600])
 axes[3, 0].set_xlim([t3[0], t3[-1]])
+axes[3, 0].text(-0.125, 0.85, '(III)', transform=axes[3, 0].transAxes, size=12,
+        weight='bold')
 
 axes[0, 0].set_ylabel('Voltage\n(mV)', rotation=90)
 axes[1, 0].set_ylabel('Current\n(pA)', rotation=90)
