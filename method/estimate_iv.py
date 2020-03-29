@@ -17,7 +17,6 @@ t_start = 3.4  # s
 t_skip = 5e-3  # s
 t_skip_2 = 5e-3  # s
 n_steps = 19
-fit_method = fit_single_exp
 
 
 def fit_single_exp(current, times,
@@ -121,6 +120,8 @@ def get_iv(i, v, t, out, debug=True):
             os.makedirs(debugdir)
     else:
         debugdir = None
+
+    fit_method = fit_single_exp
 
     print('Step, tau [ms]')
 
