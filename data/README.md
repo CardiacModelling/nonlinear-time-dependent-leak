@@ -25,7 +25,7 @@ This repository contains the following extended data that are not shown in the p
 
 ### License
 
-The data are under a [Creative Commons Attribution 4.0 International License](LICENSE-data).
+The data are under a [Creative Commons Attribution 4.0 International License](LICENSE.txt).
 
 ### References
 
