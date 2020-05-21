@@ -18,13 +18,13 @@ pip install -r requirements.txt
 
 ## Folders
 - [method](./method): Contains all modules/utility functions.
-- [data](./data): Contains all experimental data and protocols.
+- [data](./data): Contains all experimental data and protocols, the individual data files are described in a readme in this folder and there is an associated licence.
 - [fig](./fig): All result figures.
 - [out](./out): Contains all fitting results.
 
 ## License
-All the data provided in this repository within the [data](./data) directory are distributed under a [Creative Commons Attribution 4.0 International License](./data/LICENSE-data).
-The rest of the code in this repository are under a [BSD 3-Clause License](./LICENSE).
+All the data provided in this repository within the [data](./data) directory are distributed under a [Creative Commons Attribution 4.0 International License](./data/LICENSE.txt).
+The rest of the code in this repository are under a [BSD 3-Clause License](./LICENSE.txt).
 
 ## Acknowledging this work
 [PLACEHOLDER]
