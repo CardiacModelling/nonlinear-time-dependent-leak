@@ -1,6 +1,6 @@
 # Data
 
-## Underlying data
+### Underlying data
 
 The paper includes the following underlying data: 
 
@@ -14,7 +14,7 @@ The paper includes the following underlying data:
 - `silicone/20191010_sg_rrsolm_ls_noc.dat`: Voltage-clamp time-series measurement for Measurement III.
 - `silicone/20191010_sg_rsol5_ls_nocomp.dat`: Voltage-clamp time-series measurement for Measurement I.
 
-## Extended data
+### Extended data
 
 This repository contains the following extended data that are not shown in the paper: 
 
@@ -23,10 +23,11 @@ This repository contains the following extended data that are not shown in the p
 - `no-cell/nocell-staircaseramp-B01-before.csv`: Voltage-clamp time-series measurement without cell.
 - `silicone/20191009_sg_msol2_ls_nocomp.dat`: Voltage-clamp time-series measurement for the silicone experiments with manual-patch solutions.
 
-## License
+### License
 
 The data are under a [Creative Commons Attribution 4.0 International License](LICENSE-data).
 
+### References
 
 [1]
 Lei, C. L., Clerx, M., Gavaghan, D. J., Polonchuk, L., Mirams, G. R., Wang, K.
