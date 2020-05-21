@@ -23,7 +23,8 @@ pip install -r requirements.txt
 - [out](./out): Contains all fitting results.
 
 ## License
-[PLACEHOLDER]
+All the data provided in this repository within the [data](./data) directory are distributed under a [Creative Commons Attribution 4.0 International License](./data/LICENSE-data).
+The rest of the code in this repository are under a [BSD 3-Clause License](./LICENSE).
 
 ## Acknowledging this work
 [PLACEHOLDER]
