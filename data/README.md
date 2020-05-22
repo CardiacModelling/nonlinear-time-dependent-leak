@@ -4,6 +4,7 @@
 
 The paper includes the following underlying data: 
 
+- `protocol-staircaseramp.csv`: Voltage-clamp protocol for the experiments, from [1] (Figure 2, 3 top).
 - `cho-cell/herg25oc1-staircaseramp-A13-after.csv`: Voltage-clamp time-series measurement of CHO-hERG after applying E-4031 blocker from [1] (Figure 2A).
 - `cho-cell/herg25oc1-staircaseramp-times.csv`: Time points of the time-series measurement for `cho-cell/herg25oc1-staircaseramp-A13-after.csv` and `cho-cell/herg25oc1-staircaseramp-A13-before.csv`.
 - `cho-cell/mutantsrun2-staircaseramp-A01-after.csv`: Voltage-clamp time-series measurement of CHO-hERG after applying E-4031 blocker, from Victor Chang Cardiac Research Institute in Sydney (Figure 2B).
