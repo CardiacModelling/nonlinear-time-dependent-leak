@@ -1,6 +1,6 @@
 # Nonlinear time-dependent leak current in automated patch-clamp platforms
 A study of the nonlinear and time-dependent leak current observed in automated patch-clamp platforms.
-This repo contains all data and code for reproducing the results in the paper "*A nonlinear and time-dependent leak current in the presence of calcium fluoride patch clamp seal enhancer*" by Chon Lok Lei, Alan Fabbri, Dominic Whittaker, Michael Clerx, Monique Windley, Adam Hill, Gary Mirams, and Teun de Boer.
+This repo contains all data and code for reproducing the results in the paper "*[A nonlinear and time-dependent leak current in the presence of calcium fluoride patch clamp seal enhancer](https://doi.org/10.12688/wellcomeopenres.15968.1)*" by Chon Lok Lei, Alan Fabbri, Dominic Whittaker, Michael Clerx, Monique Windley, Adam Hill, Gary Mirams, and Teun de Boer.
 
 ## Installing
 This repository requires Python 3 with Numpy, Scipy, and Matplotlib.
@@ -27,5 +27,5 @@ All the data provided in this repository within the [data](./data) directory are
 The rest of the code in this repository are under a [BSD 3-Clause License](./LICENSE.txt).
 
 ## Acknowledging this work
-[PLACEHOLDER]
-
+Please cite this preprint:  
+Lei CL, Fabbri A, Whittaker DG et al. A nonlinear and time-dependent leak current in the presence of calcium fluoride patch-clamp seal enhancer [version 1; peer review: awaiting peer review]. Wellcome Open Res 2020, 5:152 (https://doi.org/10.12688/wellcomeopenres.15968.1) 
