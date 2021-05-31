@@ -1,0 +1,16 @@
+# Based on QC on protocol 'whole' for each cell.
+A13
+B05
+B24
+D21
+E07
+F21
+G05
+G06
+H22
+I04
+J07
+K16
+L05
+M12
+O02
