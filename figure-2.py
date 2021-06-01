@@ -71,6 +71,7 @@ traces4 = [i4, v]
 traces5 = [i5, v]
 
 iv_i1s, iv_v1s, iv_tau1s = [], [], []
+liv_i1s = []
 f1s = 'data-rev/cho-herg/selected-hergcho.txt'
 selected = []
 with open(f1s, 'r') as f:
@@ -84,8 +85,10 @@ for s in selected:
     iv_i1s.append(ivi)
     iv_v1s.append(ivv)
     iv_tau1s.append(ivt)
+    liv_i1s.append(compute_leak([i, v]))
 
 iv_i2s, iv_v2s, iv_tau2s = [], [], []
+liv_i2s = []
 f2s = 'data-rev/cho-herg-2/selected-hergcho2.txt'
 selected = []
 with open(f2s, 'r') as f:
@@ -99,8 +102,10 @@ for s in selected:
     iv_i2s.append(ivi)
     iv_v2s.append(ivv)
     iv_tau2s.append(ivt)
+    liv_i2s.append(compute_leak([i, v]))
 
 iv_i3s, iv_v3s, iv_tau3s = [], [], []
+liv_i3s = []
 selected = [
     [0, 1, 0],
     [1, 1, 0],
@@ -113,8 +118,10 @@ for s in selected:
     iv_i3s.append(ivi)
     iv_v3s.append(ivv)
     iv_tau3s.append(ivt)
+    liv_i3s.append(compute_leak([i, v]))
 
 iv_i4s, iv_v4s, iv_tau4s = [], [], []
+liv_i4s = []
 f4s = 'data-rev/cho-empty-auto/selected-emptycho.txt'
 selected = []
 with open(f4s, 'r') as f:
@@ -128,6 +135,7 @@ for s in selected:
     iv_i4s.append(ivi)
     iv_v4s.append(ivv)
     iv_tau4s.append(ivt)
+    liv_i4s.append(compute_leak([i, v]))
 
 iv_i5, iv_v5, iv_tau5 = estimate_iv.get_iv(i5, v, t, out='auto-5')
 
@@ -198,7 +206,6 @@ axes[-1, 0].set_xlabel('Time (s)', fontsize=12)
 
 # IV
 #axes[0, 1].axis('off')
-axes[1, 1].set_title('Normalised current')
 
 def normalise(x):
     xr = np.max(x) - np.min(x)
@@ -209,50 +216,51 @@ def normalise_by(x, y):
     return (x - np.min(y)) / yr
 
 axes[1, 1] = fig.add_subplot(grid[1:3, 3])
-for iv_v, iv_i in zip(iv_v1s, iv_i1s):
-    iv_i = normalise(iv_i)
+axes[1, 1].set_title('Normalised current')
+for iv_v, iv_i, li in zip(iv_v1s, iv_i1s, liv_i1s):
+    iv_i = normalise_by(iv_i, li)
     axes[1, 1].plot(iv_v, iv_i, 'x')#, c='C0')
-iv_i, iv_v = compute_leak_iv(traces1)
-iv_i = normalise_by(iv_i, iv_i1s[0])
+iv_i, iv_v = compute_leak_iv([liv_i1s[0], v])
+iv_i = normalise_by(iv_i, liv_i1s[0])
 axes[1, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[1, 1].set_xticks([])
 
 axes[2, 1] = fig.add_subplot(grid[3:5, 3])
-for iv_v, iv_i in zip(iv_v2s, iv_i2s):
-    iv_i = normalise(iv_i)
+for iv_v, iv_i, li in zip(iv_v2s, iv_i2s, liv_i2s):
+    iv_i = normalise_by(iv_i, li)
     axes[2, 1].plot(iv_v, iv_i, 'x')#, c='C0')
-iv_i, iv_v = compute_leak_iv(traces2)
-iv_i = normalise_by(iv_i, iv_i2s[0])
+iv_i, iv_v = compute_leak_iv([liv_i2s[0], v])
+iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[2, 1].set_xticks([])
 
 axes[3, 1] = fig.add_subplot(grid[5:7, 3])
-for iv_v, iv_i in zip(iv_v3s, iv_i3s):
-    iv_i = normalise(iv_i)
+for iv_v, iv_i, li in zip(iv_v3s, iv_i3s, liv_i3s):
+    iv_i = normalise_by(iv_i, li)
     axes[3, 1].plot(iv_v, iv_i, 'x')#, c='C0')
-iv_i, iv_v = compute_leak_iv(traces3)
-iv_i = normalise_by(iv_i, iv_i3s[-1])
+iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
+iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[3, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[3, 1].set_xticks([])
 
 axes[4, 1] = fig.add_subplot(grid[7:9, 3])
-for iv_v, iv_i in zip(iv_v4s, iv_i4s):
-    iv_i = normalise(iv_i)
+for iv_v, iv_i, li in zip(iv_v4s, iv_i4s, liv_i4s):
+    iv_i = normalise_by(iv_i, li)
     axes[4, 1].plot(iv_v, iv_i, 'x')#, c='C0')
-iv_i, iv_v = compute_leak_iv(traces4)
-iv_i = normalise_by(iv_i, iv_i4s[0])
+iv_i, iv_v = compute_leak_iv([liv_i4s[0], v])
+iv_i = normalise_by(iv_i, liv_i4s[0])
 axes[4, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[4, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[4, 1].set_xticks([])
 
 axes[5, 1] = fig.add_subplot(grid[9:11, 3])
-iv_i5 = normalise(iv_i5)
-axes[5, 1].plot(iv_v5, iv_i5, 'x', c='C0')
+iv_i5n = normalise_by(iv_i5, compute_leak(traces5))
+axes[5, 1].plot(iv_v5, iv_i5n, 'x', c='C0')
 iv_i, iv_v = compute_leak_iv(traces5)
-iv_i = normalise(iv_i, iv_i5)
+iv_i = normalise_by(iv_i, compute_leak(traces5))
 axes[5, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[5, 1].set_xlim([iv_v[0], iv_v[-1]])
 
