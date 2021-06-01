@@ -3,11 +3,11 @@ import sys
 sys.path.append('method')
 import os
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import estimate_iv
   
+cached = '--cached' in sys.argv
+
 def compute_leak(traces, i=[15000, 16250, 18000, 19250]):
   ya = np.mean(traces[0][i[0]:i[1]]); yb = np.mean(traces[0][i[2]:i[3]])
   xa = np.mean(traces[1][i[0]:i[1]]); xb = np.mean(traces[1][i[2]:i[3]])
@@ -81,10 +81,15 @@ with open(f1s, 'r') as f:
 for s in selected:
     f = 'data-rev/cho-herg/hergcho-staircaseramp-%s-after-sweep1.csv' % s
     i = np.loadtxt(f, delimiter=',', skiprows=1)
-    ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-1-%s' % s)
-    iv_i1s.append(ivi)
-    iv_v1s.append(ivv)
-    iv_tau1s.append(ivt)
+    if cached:
+        iv_i1s.append(np.loadtxt('out/auto-1-%s/i_s.txt' % s))
+        iv_v1s.append(np.loadtxt('out/auto-1-%s/v_s.txt' % s))
+        iv_tau1s.append(np.loadtxt('out/auto-1-%s/tau_s.txt' % s))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-1-%s' % s)
+        iv_i1s.append(ivi)
+        iv_v1s.append(ivv)
+        iv_tau1s.append(ivt)
     liv_i1s.append(compute_leak([i, v]))
 
 iv_i2s, iv_v2s, iv_tau2s = [], [], []
@@ -98,10 +103,15 @@ with open(f2s, 'r') as f:
 for s in selected:
     f = 'data-rev/cho-herg-2/hergcho2-staircaseramp-%s-after-sweep1.csv' % s
     i = np.loadtxt(f, delimiter=',', skiprows=1)
-    ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-2-%s' % s)
-    iv_i2s.append(ivi)
-    iv_v2s.append(ivv)
-    iv_tau2s.append(ivt)
+    if cached:
+        iv_i2s.append(np.loadtxt('out/auto-2-%s/i_s.txt' % s))
+        iv_v2s.append(np.loadtxt('out/auto-2-%s/v_s.txt' % s))
+        iv_tau2s.append(np.loadtxt('out/auto-2-%s/tau_s.txt' % s))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-2-%s' % s)
+        iv_i2s.append(ivi)
+        iv_v2s.append(ivv)
+        iv_tau2s.append(ivt)
     liv_i2s.append(compute_leak([i, v]))
 
 iv_i3s, iv_v3s, iv_tau3s = [], [], []
@@ -114,10 +124,15 @@ selected = [
 ]
 for s in selected:
     i = load(f3, s)[0]
-    ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-3-%s' % s[0])
-    iv_i3s.append(ivi)
-    iv_v3s.append(ivv)
-    iv_tau3s.append(ivt)
+    if cached:
+        iv_i3s.append(np.loadtxt('out/auto-3-%s/i_s.txt' % s[0]))
+        iv_v3s.append(np.loadtxt('out/auto-3-%s/v_s.txt' % s[0]))
+        iv_tau3s.append(np.loadtxt('out/auto-3-%s/tau_s.txt' % s[0]))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-3-%s' % s[0])
+        iv_i3s.append(ivi)
+        iv_v3s.append(ivv)
+        iv_tau3s.append(ivt)
     liv_i3s.append(compute_leak([i, v]))
 
 iv_i4s, iv_v4s, iv_tau4s = [], [], []
@@ -131,17 +146,27 @@ with open(f4s, 'r') as f:
 for s in selected:
     f = 'data-rev/cho-empty-auto/emptycho-staircaseramp-%s-before-sweep1.csv' % s
     i = np.loadtxt(f, delimiter=',', skiprows=1)
-    ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-4-%s' % s)
-    iv_i4s.append(ivi)
-    iv_v4s.append(ivv)
-    iv_tau4s.append(ivt)
+    if cached:
+        iv_i4s.append(np.loadtxt('out/auto-4-%s/i_s.txt' % s))
+        iv_v4s.append(np.loadtxt('out/auto-4-%s/v_s.txt' % s))
+        iv_tau4s.append(np.loadtxt('out/auto-4-%s/tau_s.txt' % s))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-4-%s' % s)
+        iv_i4s.append(ivi)
+        iv_v4s.append(ivv)
+        iv_tau4s.append(ivt)
     liv_i4s.append(compute_leak([i, v]))
 
-iv_i5, iv_v5, iv_tau5 = estimate_iv.get_iv(i5, v, t, out='auto-5')
+if cached:
+    iv_i5 = np.loadtxt('out/auto-5/i_s.txt')
+    iv_v5 = np.loadtxt('out/auto-5/v_s.txt')
+    iv_tau5 = np.loadtxt('out/auto-5/tau_s.txt')
+else:
+    iv_i5, iv_v5, iv_tau5 = estimate_iv.get_iv(i5, v, t, out='auto-5')
 
 # Plot
 fig = plt.figure(figsize=(8, 6))
-grid = plt.GridSpec(11, 4, hspace=0.125, wspace=0.2)
+grid = plt.GridSpec(11, 5, hspace=0.125, wspace=0.2)
 axes = np.empty([6, 2], dtype=object)
 
 # Voltage
@@ -215,50 +240,60 @@ def normalise_by(x, y):
     yr = np.max(y) - np.min(y)
     return (x - np.min(y)) / yr
 
-axes[1, 1] = fig.add_subplot(grid[1:3, 3])
+axes[1, 1] = fig.add_subplot(grid[1:3, 3:])
 axes[1, 1].set_title('Normalised current')
+niv_i1s = []
 for iv_v, iv_i, li in zip(iv_v1s, iv_i1s, liv_i1s):
-    iv_i = normalise_by(iv_i, li)
-    axes[1, 1].plot(iv_v, iv_i, 'x')#, c='C0')
+    niv_i1s.append(normalise_by(iv_i, li))
+axes[1, 1].boxplot(np.array(niv_i1s), positions=iv_v1s[0])
 iv_i, iv_v = compute_leak_iv([liv_i1s[0], v])
 iv_i = normalise_by(iv_i, liv_i1s[0])
 axes[1, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[1, 1].set_xticks([])
 
-axes[2, 1] = fig.add_subplot(grid[3:5, 3])
+axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
+niv_i2s = []
 for iv_v, iv_i, li in zip(iv_v2s, iv_i2s, liv_i2s):
-    iv_i = normalise_by(iv_i, li)
-    axes[2, 1].plot(iv_v, iv_i, 'x')#, c='C0')
+    niv_i2s.append(normalise_by(iv_i, li))
+axes[2, 1].boxplot(np.array(niv_i2s), positions=iv_v2s[0])
 iv_i, iv_v = compute_leak_iv([liv_i2s[0], v])
 iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[2, 1].set_xticks([])
 
-axes[3, 1] = fig.add_subplot(grid[5:7, 3])
+axes[3, 1] = fig.add_subplot(grid[5:7, 3:])
+niv_i3s = []
 for iv_v, iv_i, li in zip(iv_v3s, iv_i3s, liv_i3s):
-    iv_i = normalise_by(iv_i, li)
-    axes[3, 1].plot(iv_v, iv_i, 'x')#, c='C0')
+    niv_i3s.append(normalise_by(iv_i, li))
+axes[3, 1].boxplot(np.array(niv_i3s), positions=iv_v3s[0])
 iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
 iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[3, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[3, 1].set_xticks([])
 
-axes[4, 1] = fig.add_subplot(grid[7:9, 3])
+axes[4, 1] = fig.add_subplot(grid[7:9, 3:])
+niv_i4s = []
 for iv_v, iv_i, li in zip(iv_v4s, iv_i4s, liv_i4s):
-    iv_i = normalise_by(iv_i, li)
-    axes[4, 1].plot(iv_v, iv_i, 'x')#, c='C0')
+    niv_i4s.append(normalise_by(iv_i, li))
+axes[4, 1].boxplot(np.array(niv_i4s), positions=iv_v4s[0])
+#df = pd.DataFrame(dict(x=np.array(iv_v4s).reshape(-1),
+#                       y=np.array(niv_i4s).reshape(-1)))
+#g4 = sns.boxplot(x='x', y='y', data=df, ax=axes[4, 1])
+#g4.set(xlabel=None, ylabel=None)
+#df = pd.DataFrame(np.array(niv_i4s))
+#df.boxplot(positions=iv_v4s[0], ax=axes[4, 1])
 iv_i, iv_v = compute_leak_iv([liv_i4s[0], v])
 iv_i = normalise_by(iv_i, liv_i4s[0])
 axes[4, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[4, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[4, 1].set_xticks([])
 
-axes[5, 1] = fig.add_subplot(grid[9:11, 3])
-iv_i5n = normalise_by(iv_i5, compute_leak(traces5))
-axes[5, 1].plot(iv_v5, iv_i5n, 'x', c='C0')
+axes[5, 1] = fig.add_subplot(grid[9:11, 3:])
+niv_i5 = normalise_by(iv_i5, compute_leak(traces5))
+axes[5, 1].plot(iv_v5, niv_i5, 'x', c='C0')
 iv_i, iv_v = compute_leak_iv(traces5)
 iv_i = normalise_by(iv_i, compute_leak(traces5))
 axes[5, 1].plot(iv_v, iv_i, c='C1', ls='--')
