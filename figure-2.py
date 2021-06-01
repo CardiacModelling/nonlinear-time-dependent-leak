@@ -141,7 +141,7 @@ iv_i5, iv_v5, iv_tau5 = estimate_iv.get_iv(i5, v, t, out='auto-5')
 
 # Plot
 fig = plt.figure(figsize=(8, 6))
-grid = plt.GridSpec(11, 4, hspace=0.125, wspace=0.5)
+grid = plt.GridSpec(11, 4, hspace=0.125, wspace=0.2)
 axes = np.empty([6, 2], dtype=object)
 
 # Voltage
@@ -157,7 +157,7 @@ axes[1, 0].plot(t, compute_leak(traces1), c='C1', ls='--')
 axes[1, 0].set_ylim([-340, 440])
 axes[1, 0].set_xlim([t[0], t[-1]])
 axes[1, 0].set_xticks([])
-axes[1, 0].text(-0.125, 0.85, '(A)', transform=axes[1, 0].transAxes, size=12,
+axes[1, 0].text(-0.2, 0.85, '(A)', transform=axes[1, 0].transAxes, size=12,
         weight='bold')
 
 axes[2, 0] = fig.add_subplot(grid[3:5, :3])
@@ -166,7 +166,7 @@ axes[2, 0].plot(t, compute_leak(traces2), c='C1', ls='--')
 axes[2, 0].set_ylim([-420, 460])
 axes[2, 0].set_xlim([t[0], t[-1]])
 axes[2, 0].set_xticks([])
-axes[2, 0].text(-0.125, 0.85, '(B)', transform=axes[2, 0].transAxes, size=12,
+axes[2, 0].text(-0.2, 0.85, '(B)', transform=axes[2, 0].transAxes, size=12,
         weight='bold')
 
 axes[3, 0] = fig.add_subplot(grid[5:7, :3])
@@ -175,7 +175,7 @@ axes[3, 0].plot(t, compute_leak(traces3), c='C1', ls='--')
 axes[3, 0].set_ylim([-550, 600])
 axes[3, 0].set_xlim([t[0], t[-1]])
 axes[3, 0].set_xticks([])
-axes[3, 0].text(-0.125, 0.85, '(C)', transform=axes[3, 0].transAxes, size=12,
+axes[3, 0].text(-0.2, 0.85, '(C)', transform=axes[3, 0].transAxes, size=12,
         weight='bold')
 
 axes[4, 0] = fig.add_subplot(grid[7:9, :3])
@@ -184,7 +184,7 @@ axes[4, 0].plot(t, compute_leak(traces4), c='C1', ls='--')
 axes[4, 0].set_ylim([-420, 460])
 axes[4, 0].set_xlim([t[0], t[-1]])
 axes[4, 0].set_xticks([])
-axes[4, 0].text(-0.125, 0.85, '(D)', transform=axes[4, 0].transAxes, size=12,
+axes[4, 0].text(-0.2, 0.85, '(D)', transform=axes[4, 0].transAxes, size=12,
         weight='bold')
 
 axes[5, 0] = fig.add_subplot(grid[9:11, :3])
@@ -192,7 +192,7 @@ axes[5, 0].plot(t, i5, c='C0')
 axes[5, 0].plot(t, compute_leak(traces5), c='C1', ls='--')
 axes[5, 0].set_ylim([-6000, 4500])
 axes[5, 0].set_xlim([t[0], t[-1]])
-axes[5, 0].text(-0.125, 0.85, '(E)', transform=axes[5, 0].transAxes, size=12,
+axes[5, 0].text(-0.2, 0.85, '(E)', transform=axes[5, 0].transAxes, size=12,
         weight='bold')
 
 
