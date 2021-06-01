@@ -71,7 +71,18 @@ def fit_single_exp(current, times,
             plt.savefig('%s/s%s.png' % (debugdir, i_step))
             plt.close()
         return c, np.NaN
-    popt, pcov = curve_fit(exp_func, x, y, p0=p0)
+    try:
+        popt, pcov = curve_fit(exp_func, x, y, p0=p0)
+    except RuntimeError:
+        if debug is not None:
+            debugdir, i_step = debug
+            plt.plot(times[time_window[0] - 500:time_window[-1] + 500],
+                     current[time_window[0] - 500:time_window[-1] + 500],
+                     c='#d62728')
+            plt.axhline(y=c, ls='--', c='C2')
+            plt.savefig('%s/s%s.png' % (debugdir, i_step))
+            plt.close()
+        return c, np.NaN
     tau = 1e3 / popt[1]
     out = popt[2]
     if debug is not None:
