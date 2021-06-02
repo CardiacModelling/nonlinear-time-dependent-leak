@@ -677,3 +677,22 @@ class Bundle(object):
         
     def __repr__(self):
         return "Bundle(%r)" % list(self.catalog.keys())
+
+
+def load(f, i, ds=2):
+    # f: file path
+    # i: index list, [group_ind, series_ind, sweep_ind]
+    # ds: downsample
+    #
+    # return
+    # ====
+    # out: Recorded trace
+    # times: Recorded trace's times
+    b = Bundle(f)
+    nt = 0  # Usually 0 is current
+    out = b.data[i + [nt]] * 1e12  # A -> pA
+    info = b.pul[i[0]][i[1]][i[2]][0]
+    times = np.linspace(info.XStart,
+            info.XStart + info.XInterval * (len(out)-1),
+            len(out))
+    return out[::ds], times[::ds]

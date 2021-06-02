@@ -4,6 +4,7 @@ sys.path.append('method')
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import heka_reader as hr
 import estimate_iv
   
 cached = '--cached' in sys.argv
@@ -23,25 +24,6 @@ def compute_leak_iv(traces, i=[15000, 16250, 18000, 19250]):
   v = np.linspace(-160, 80, 100)
   return m * v + c, v
 
-def load(f, i, ds=2):
-    # f: file path
-    # i: index list, [group_ind, series_ind, sweep_ind]
-    # ds: downsample
-    #
-    # return
-    # ====
-    # out: Recorded trace
-    # times: Recorded trace's times
-    import heka_reader
-    b = heka_reader.Bundle(f)
-    nt = 0  # Usually 0 is current
-    out = b.data[i + [nt]] * 1e12  # A -> pA
-    info = b.pul[i[0]][i[1]][i[2]][0]
-    times = np.linspace(info.XStart,
-            info.XStart + info.XInterval * (len(out)-1),
-            len(out))
-    return out[::ds], times[::ds]
-
 
 savedir = 'fig'
 if not os.path.isdir(savedir):
@@ -57,12 +39,12 @@ ft = 'data/cho-cell/herg25oc1-staircaseramp-times.csv'
 t = np.loadtxt(ft, delimiter=',', skiprows=1)
 i1 = np.loadtxt(f1, delimiter=',', skiprows=1)
 i2 = np.loadtxt(f2, delimiter=',', skiprows=1)
-i3 = load(f3, [4, 3, 0])[0]
+i3 = hr.load(f3, [4, 3, 0])[0]
 i4 = np.loadtxt(f4, delimiter=',', skiprows=1)
 i5 = np.loadtxt(f5, delimiter=',', skiprows=1)
 
 v = np.loadtxt('data/protocol-staircaseramp.csv', delimiter=',',
-        skiprows=1)[::2, 1]
+               skiprows=1)[::2, 1]
 
 traces1 = [i1, v]
 traces2 = [i2, v]
@@ -123,7 +105,7 @@ selected = [
     [4, 3, 0],
 ]
 for s in selected:
-    i = load(f3, s)[0]
+    i = hr.load(f3, s)[0]
     if cached:
         iv_i3s.append(np.loadtxt('out/auto-3-%s/i_s.txt' % s[0]))
         iv_v3s.append(np.loadtxt('out/auto-3-%s/v_s.txt' % s[0]))
