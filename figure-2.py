@@ -232,6 +232,18 @@ axes[-1, 0].set_xlabel('Time (s)', fontsize=12)
 # IV
 #axes[0, 1].axis('off')
 
+def boxplot(ivis, ivvs, ax):
+    x = [-120, -80, -60, -40, -20, 0, 20, 40]
+    for xx in x:
+        i = np.where(ivvs == xx)[0]
+        y = ivis[:, i]
+        bp = ax.boxplot(y.reshape(-1, 1), positions=[xx], showfliers=False,
+                        widths=6)
+        for e in ['whiskers', 'caps']:
+            plt.setp(bp[e], color='#7f7f7f')
+        for e in ['boxes', 'fliers', 'means', 'medians']:
+            plt.setp(bp[e], color='C0')
+
 def normalise(x):
     xr = np.max(x) - np.min(x)
     return (x - np.min(x)) / xr
@@ -245,7 +257,7 @@ axes[1, 1].set_title('Normalised current')
 niv_i1s = []
 for iv_v, iv_i, li in zip(iv_v1s, iv_i1s, liv_i1s):
     niv_i1s.append(normalise_by(iv_i, li))
-axes[1, 1].boxplot(np.array(niv_i1s), positions=iv_v1s[0])
+boxplot(np.array(niv_i1s), np.round(iv_v1s[0]), axes[1, 1])
 iv_i, iv_v = compute_leak_iv([liv_i1s[0], v])
 iv_i = normalise_by(iv_i, liv_i1s[0])
 axes[1, 1].plot(iv_v, iv_i, c='C1', ls='--')
@@ -256,7 +268,7 @@ axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
 niv_i2s = []
 for iv_v, iv_i, li in zip(iv_v2s, iv_i2s, liv_i2s):
     niv_i2s.append(normalise_by(iv_i, li))
-axes[2, 1].boxplot(np.array(niv_i2s), positions=iv_v2s[0])
+boxplot(np.array(niv_i2s), np.round(iv_v2s[0]), axes[2, 1])
 iv_i, iv_v = compute_leak_iv([liv_i2s[0], v])
 iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
@@ -267,7 +279,7 @@ axes[3, 1] = fig.add_subplot(grid[5:7, 3:])
 niv_i3s = []
 for iv_v, iv_i, li in zip(iv_v3s, iv_i3s, liv_i3s):
     niv_i3s.append(normalise_by(iv_i, li))
-axes[3, 1].boxplot(np.array(niv_i3s), positions=iv_v3s[0])
+boxplot(np.array(niv_i3s), np.round(iv_v3s[0]), axes[3, 1])
 iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
 iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
@@ -278,13 +290,7 @@ axes[4, 1] = fig.add_subplot(grid[7:9, 3:])
 niv_i4s = []
 for iv_v, iv_i, li in zip(iv_v4s, iv_i4s, liv_i4s):
     niv_i4s.append(normalise_by(iv_i, li))
-axes[4, 1].boxplot(np.array(niv_i4s), positions=iv_v4s[0])
-#df = pd.DataFrame(dict(x=np.array(iv_v4s).reshape(-1),
-#                       y=np.array(niv_i4s).reshape(-1)))
-#g4 = sns.boxplot(x='x', y='y', data=df, ax=axes[4, 1])
-#g4.set(xlabel=None, ylabel=None)
-#df = pd.DataFrame(np.array(niv_i4s))
-#df.boxplot(positions=iv_v4s[0], ax=axes[4, 1])
+boxplot(np.array(niv_i4s), np.round(iv_v4s[0]), axes[4, 1])
 iv_i, iv_v = compute_leak_iv([liv_i4s[0], v])
 iv_i = normalise_by(iv_i, liv_i4s[0])
 axes[4, 1].plot(iv_v, iv_i, c='C1', ls='--')
@@ -293,7 +299,7 @@ axes[4, 1].set_xticks([])
 
 axes[5, 1] = fig.add_subplot(grid[9:11, 3:])
 niv_i5 = normalise_by(iv_i5, compute_leak(traces5))
-axes[5, 1].plot(iv_v5, niv_i5, 'x', c='C0')
+axes[5, 1].plot(np.round(iv_v5), niv_i5, 'x', c='C0')
 iv_i, iv_v = compute_leak_iv(traces5)
 iv_i = normalise_by(iv_i, compute_leak(traces5))
 axes[5, 1].plot(iv_v, iv_i, c='C1', ls='--')
