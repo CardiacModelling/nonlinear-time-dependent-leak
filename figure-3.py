@@ -110,6 +110,49 @@ for s in selected:
         iv_v4s.append(ivv)
         iv_tau4s.append(ivt)
 
+iv_i6s, iv_v6s, iv_tau6s = [], [], []
+liv_i6s = []
+selected = [
+    [1, 7, 1],
+    [2, 1, 0],
+]
+for s in selected:
+    i = hr.load('data-rev/silicone/Sylguard_20201020.dat', s)[0]
+    #if cached:
+    if False:
+        iv_i6s.append(np.loadtxt('out/manual-1-1-%s/i_s.txt' % s[0]))
+        iv_v6s.append(np.loadtxt('out/manual-1-1-%s/v_s.txt' % s[0]))
+        iv_tau6s.append(np.loadtxt('out/manual-1-1-%s/tau_s.txt' % s[0]))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='manual-1-1-%s' % s[0])
+        iv_i6s.append(ivi)
+        iv_v6s.append(ivv)
+        iv_tau6s.append(ivt)
+selected = [
+    [0, 3, 0],
+    [1, 1, 0],
+    [2, 1, 0],
+    [3, 2, 0],
+    [4, 4, 0],
+    [5, 1, 0],
+    [6, 5, 0],
+    [7, 1, 0],
+    [8, 5, 0],
+    [10, 3, 1],
+]
+for s in selected:
+    i = hr.load('data-rev/silicone/Sylguard_20201021.dat', s)[0]
+    #if cached:
+    if False:
+        iv_i6s.append(np.loadtxt('out/manual-1-2-%s/i_s.txt' % s[0]))
+        iv_v6s.append(np.loadtxt('out/manual-1-2-%s/v_s.txt' % s[0]))
+        iv_tau6s.append(np.loadtxt('out/manual-1-2-%s/tau_s.txt' % s[0]))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='manual-1-2-%s' % s[0])
+        iv_i6s.append(ivi)
+        iv_v6s.append(ivv)
+        iv_tau6s.append(ivt)
+
 
 # Plot
 fig, axes = plt.subplots(1, 2, figsize=(8, 2.75))
@@ -179,10 +222,11 @@ def hist(values, label, c, ax):
     ax.hist(values, label=label, **kwargs)
     return ax
 
-hist(np.array(iv_tau1s)[:, 0], label='(A)', c='C0', ax=axes[1])
-hist(np.array(iv_tau2s)[:, 0], label='(B)', c='C1', ax=axes[1])
-hist(np.array(iv_tau3s)[:, 0], label='(C)', c='C2', ax=axes[1])
-hist(np.array(iv_tau4s)[:, 0], label='(D)', c='C3', ax=axes[1])
+hist(np.array(iv_tau1s)[:, 0], label='A', c='C0', ax=axes[1])
+hist(np.array(iv_tau2s)[:, 0], label='B', c='C1', ax=axes[1])
+hist(np.array(iv_tau3s)[:, 0], label='C', c='C2', ax=axes[1])
+hist(np.array(iv_tau4s)[:, 0], label='D', c='C3', ax=axes[1])
+hist(np.array(iv_tau6s)[:, 0], label='I', c='C4', ax=axes[1])
 axes[1].set_xlim([50, 1250])
 axes[1].legend()
 axes[1].set_xlabel('Time constant (ms)')
