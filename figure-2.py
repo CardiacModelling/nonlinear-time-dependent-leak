@@ -8,6 +8,11 @@ import heka_reader as hr
 import estimate_iv
   
 cached = '--cached' in sys.argv
+if '--seed' in sys.argv:
+    seed = int(sys.argv[sys.argv.index('--seed') + 1])
+else:
+    seed = 0
+np.random.seed(seed)
 
 def compute_leak(traces, i=[15000, 16250, 18000, 19250]):
   ya = np.mean(traces[0][i[0]:i[1]]); yb = np.mean(traces[0][i[2]:i[3]])
