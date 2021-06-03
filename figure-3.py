@@ -8,6 +8,11 @@ import heka_reader as hr
 import estimate_iv
 
 cached = '--cached' in sys.argv
+if '--seed' in sys.argv:
+    seed = int(sys.argv[sys.argv.index('--seed') + 1])
+else:
+    seed = 0
+np.random.seed(seed)
 
 savedir = 'fig'
 if not os.path.isdir(savedir):
@@ -182,6 +187,11 @@ axes[1].set_xlim([50, 1250])
 axes[1].legend()
 axes[1].set_xlabel('Time constant (ms)')
 axes[1].set_ylabel('Frequency')
+
+axes[0].text(-0.25, 0.99, '(A)', transform=axes[0].transAxes, size=12,
+             weight='bold')
+axes[1].text(-0.15, 0.99, '(B)', transform=axes[1].transAxes, size=12,
+             weight='bold')
 
 # plt.subplots_adjust(top=0.975, bottom=0.1, right=0.975, left=0.075)
 plt.savefig('%s/figure-3.png' % savedir, bbox_inches='tight', pad_inches=0,
