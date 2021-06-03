@@ -155,6 +155,7 @@ for s in selected:
 # Plot
 fig, axes = plt.subplots(1, 2, figsize=(8, 2.75))
 
+# Panel A
 def plot_example(current, times, ax):
     from scipy.optimize import curve_fit
 
@@ -208,6 +209,15 @@ def plot_example(current, times, ax):
 
 axes[0] = plot_example(i1, t, axes[0])
 
+# Panel B
+list_iv_taus = [np.array(iv_tau1s)[:, 0],
+                np.array(iv_tau2s)[:, 0],
+                np.array(iv_tau3s)[:, 0],
+                np.array(iv_tau4s)[:, 0],
+                np.array(iv_tau6s)[:, 0],]
+for i, x in enumerate(list_iv_taus):
+    list_iv_taus[i] = x[~np.isnan(x)]
+list_labels = ['A', 'B', 'C', 'D', 'I']
 ''' # Histograms
 bins = np.linspace(50, 1250, 20)
 def hist(values, label, c, ax):
@@ -221,35 +231,38 @@ def hist(values, label, c, ax):
     ax.hist(values, label=label, **kwargs)
     return ax
 
-hist(np.array(iv_tau1s)[:, 0], label='A', c='C0', ax=axes[1])
-hist(np.array(iv_tau2s)[:, 0], label='B', c='C1', ax=axes[1])
-hist(np.array(iv_tau3s)[:, 0], label='C', c='C2', ax=axes[1])
-hist(np.array(iv_tau4s)[:, 0], label='D', c='C3', ax=axes[1])
-hist(np.array(iv_tau6s)[:, 0], label='I', c='C4', ax=axes[1])
+for i, iv_tau in enumerate(list_iv_taus):
+    hist(iv_tau, label=list_labels[i], c='C' + str(i), ax=axes[1])
 axes[1].set_xlim([50, 1250])
 axes[1].legend()
 axes[1].set_xlabel('Time constant (ms)')
 axes[1].set_ylabel('Frequency')
 ''' # Swarmplots
 import seaborn as sns
-sns.boxplot(data=[np.array(iv_tau1s)[:, 0],
-                  np.array(iv_tau2s)[:, 0],
-                  np.array(iv_tau3s)[:, 0],
-                  np.array(iv_tau4s)[:, 0],
-                  np.array(iv_tau6s)[:, 0],], showfliers=False, ax=axes[1])
+sns.boxplot(data=list_iv_taus, showfliers=False, ax=axes[1])
 for patch in axes[1].artists:
     r, g, b, a = patch.get_facecolor()
     patch.set_facecolor((r, g, b, .3))
-sns.swarmplot(data=[np.array(iv_tau1s)[:, 0],
-                    np.array(iv_tau2s)[:, 0],
-                    np.array(iv_tau3s)[:, 0],
-                    np.array(iv_tau4s)[:, 0],
-                    np.array(iv_tau6s)[:, 0],], ax=axes[1])
-axes[1].set_xticklabels(['A', 'B', 'C', 'D', 'I'])
+sns.swarmplot(data=list_iv_taus, ax=axes[1])
+axes[1].set_xticklabels(list_labels)
 axes[1].set_ylim([10, 1290])
 axes[1].set_xlabel('Measurements')
 axes[1].set_ylabel('Time constant (ms)')
 #'''
+
+if True:
+    from scipy.stats import ttest_ind, f_oneway
+    print('Independent T-test')
+    N_groups = len(list_iv_taus)
+    for i in range(N_groups):
+        for j in range(i+1, N_groups):
+            c = ttest_ind(list_iv_taus[i], list_iv_taus[j],
+                          equal_var=True,           # Expect the same variance
+                          alternative='two-sided')  # Can be larger or smaller
+            print(list_labels[i], list_labels[j], c)
+    print('One-way ANOVA')
+    f = f_oneway(*list_iv_taus)
+    print(f)
 
 axes[0].text(-0.25, 0.99, '(A)', transform=axes[0].transAxes, size=12,
              weight='bold')
