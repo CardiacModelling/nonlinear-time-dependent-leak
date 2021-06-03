@@ -118,8 +118,7 @@ selected = [
 ]
 for s in selected:
     i = hr.load('data-rev/silicone/Sylguard_20201020.dat', s)[0]
-    #if cached:
-    if False:
+    if cached:
         iv_i6s.append(np.loadtxt('out/manual-1-1-%s/i_s.txt' % s[0]))
         iv_v6s.append(np.loadtxt('out/manual-1-1-%s/v_s.txt' % s[0]))
         iv_tau6s.append(np.loadtxt('out/manual-1-1-%s/tau_s.txt' % s[0]))
@@ -142,8 +141,7 @@ selected = [
 ]
 for s in selected:
     i = hr.load('data-rev/silicone/Sylguard_20201021.dat', s)[0]
-    #if cached:
-    if False:
+    if cached:
         iv_i6s.append(np.loadtxt('out/manual-1-2-%s/i_s.txt' % s[0]))
         iv_v6s.append(np.loadtxt('out/manual-1-2-%s/v_s.txt' % s[0]))
         iv_tau6s.append(np.loadtxt('out/manual-1-2-%s/tau_s.txt' % s[0]))
@@ -210,6 +208,7 @@ def plot_example(current, times, ax):
 
 axes[0] = plot_example(i1, t, axes[0])
 
+''' # Histograms
 bins = np.linspace(50, 1250, 20)
 def hist(values, label, c, ax):
     import matplotlib
@@ -231,13 +230,34 @@ axes[1].set_xlim([50, 1250])
 axes[1].legend()
 axes[1].set_xlabel('Time constant (ms)')
 axes[1].set_ylabel('Frequency')
+''' # Swarmplots
+import seaborn as sns
+sns.boxplot(data=[np.array(iv_tau1s)[:, 0],
+                  np.array(iv_tau2s)[:, 0],
+                  np.array(iv_tau3s)[:, 0],
+                  np.array(iv_tau4s)[:, 0],
+                  np.array(iv_tau6s)[:, 0],], showfliers=False, ax=axes[1])
+for patch in axes[1].artists:
+    r, g, b, a = patch.get_facecolor()
+    patch.set_facecolor((r, g, b, .3))
+sns.swarmplot(data=[np.array(iv_tau1s)[:, 0],
+                    np.array(iv_tau2s)[:, 0],
+                    np.array(iv_tau3s)[:, 0],
+                    np.array(iv_tau4s)[:, 0],
+                    np.array(iv_tau6s)[:, 0],], ax=axes[1])
+axes[1].set_xticklabels(['A', 'B', 'C', 'D', 'I'])
+axes[1].set_ylim([10, 1290])
+axes[1].set_xlabel('Measurements')
+axes[1].set_ylabel('Time constant (ms)')
+#'''
 
 axes[0].text(-0.25, 0.99, '(A)', transform=axes[0].transAxes, size=12,
              weight='bold')
-axes[1].text(-0.15, 0.99, '(B)', transform=axes[1].transAxes, size=12,
+axes[1].text(-0.25, 0.99, '(B)', transform=axes[1].transAxes, size=12,
              weight='bold')
 
 # plt.subplots_adjust(top=0.975, bottom=0.1, right=0.975, left=0.075)
+plt.tight_layout()
 plt.savefig('%s/figure-3.png' % savedir, bbox_inches='tight', pad_inches=0,
         dpi=200)
 plt.savefig('%s/figure-3.pdf' % savedir, bbox_inches='tight', pad_inches=0,
