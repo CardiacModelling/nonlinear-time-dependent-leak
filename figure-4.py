@@ -254,14 +254,8 @@ boxplot(np.array(niv_i1s), np.round(iv_v1s[0]), axes[1, 1])
 iv_i, iv_v = compute_leak_iv([liv_i1s[0], v])
 iv_i = normalise_by(iv_i, liv_i1s[0])
 axes[1, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[1, 1].set_xticks([])
 
 axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
-#niv_i2 = normalise_by(iv_i2, compute_leak(traces2, i=i_m2))
-#axes[2, 1].plot(np.round(iv_v2), niv_i2, 'x', c='C0')
-#iv_i, iv_v = compute_leak_iv(traces2, i=i_m2)
-#iv_i = normalise_by(iv_i, compute_leak(traces2, i=i_m2))
 niv_i2s = []
 for iv_v, iv_i, li in zip(iv_v2s, iv_i2s, liv_i2s):
     niv_i2s.append(normalise_by(iv_i, li))
@@ -269,14 +263,8 @@ boxplot(np.array(niv_i2s), np.round(iv_v2s[0]), axes[2, 1])
 iv_i, iv_v = compute_leak_iv([liv_i2s[0], v], i=i_m2)
 iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[2, 1].set_xticks([])
 
 axes[3, 1] = fig.add_subplot(grid[5:7, 3:])
-#niv_i3 = normalise_by(iv_i3, compute_leak(traces3))
-#axes[3, 1].plot(np.round(iv_v3), niv_i3, 'x', c='C0')
-#iv_i, iv_v = compute_leak_iv(traces3)
-#iv_i = normalise_by(iv_i, compute_leak(traces3))
 niv_i3s = []
 for iv_v, iv_i, li in zip(iv_v3s, iv_i3s, liv_i3s):
     niv_i3s.append(normalise_by(iv_i, li))
@@ -284,9 +272,18 @@ boxplot(np.array(niv_i3s), np.round(iv_v3s[0]), axes[3, 1])
 iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
 iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[3, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[3, 1].set_xticks([-120, -80, -40, 0, 40])
-axes[3, 1].set_xticklabels([-120, -80, -40, 0, 40])
+
+for i in range(1, 4):
+    axes[i, 1].set_ylim([-2.9, 3.7])
+    axes[i, 1].set_yticks([-2, 0, 2])
+    axes[i, 1].set_yticklabels([r'$-2$', r'$0$', r'$2$'])
+    axes[i, 1].grid(lw=1, alpha=0.4)
+    axes[i, 1].set_xlim([-160, 80])
+    axes[i, 1].set_xticks([-120, -80, -40, 0, 40])
+
+axes[1, 1].set_xticklabels([])
+axes[2, 1].set_xticklabels([])
+axes[3, 1].set_xticklabels([r'$-120$', r'$-80$', r'$-40$', r'$0$', r'$40$'])
 
 axes[-1, 1].set_xlabel('Voltage (mV)', fontsize=12)
 
