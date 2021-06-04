@@ -55,8 +55,19 @@ traces1 = [i1, v]
 traces2 = [i2, v]
 traces3 = [i3, v]
 
+
 iv_i1s, iv_v1s, iv_tau1s = [], [], []
 liv_i1s = []
+if cached:
+    iv_i1s.append(np.loadtxt('out/manual-1/i_s.txt'))
+    iv_v1s.append(np.loadtxt('out/manual-1/v_s.txt'))
+    iv_tau1s.append(np.loadtxt('out/manual-1/tau_s.txt'))
+else:
+    ivi, ivv, ivt = estimate_iv.get_iv(i1, v, t1, out='manual-1')
+    iv_i1s.append(ivi)
+    iv_v1s.append(ivv)
+    iv_tau1s.append(ivt)
+liv_i1s.append(compute_leak([i1, v]))
 selected = [
     [1, 7, 1],
     [2, 1, 0],
@@ -99,16 +110,67 @@ for s in selected:
     liv_i1s.append(compute_leak([i, v]))
 
 
+iv_i2s, iv_v2s, iv_tau2s = [], [], []
+liv_i2s = []
 if cached:
-    iv_i2 = np.loadtxt('out/manual-2/i_s.txt')
-    iv_v2 = np.loadtxt('out/manual-2/v_s.txt')
-    iv_tau2 = np.loadtxt('out/manual-2/tau_s.txt')
-    iv_i3 = np.loadtxt('out/manual-3/i_s.txt')
-    iv_v3 = np.loadtxt('out/manual-3/v_s.txt')
-    iv_tau3 = np.loadtxt('out/manual-3/tau_s.txt')
+    iv_i2s.append(np.loadtxt('out/manual-2/i_s.txt'))
+    iv_v2s.append(np.loadtxt('out/manual-2/v_s.txt'))
+    iv_tau2s.append(np.loadtxt('out/manual-2/tau_s.txt'))
 else:
-    iv_i2, iv_v2, iv_tau2 = estimate_iv.get_iv(i2, v, t2, out='manual-2')
-    iv_i3, iv_v3, iv_tau3 = estimate_iv.get_iv(i3, v, t3, out='manual-3')
+    ivi, ivv, ivt = estimate_iv.get_iv(i2, v, t2, out='manual-2')
+    iv_i2s.append(ivi)
+    iv_v2s.append(ivv)
+    iv_tau2s.append(ivt)
+liv_i2s.append(compute_leak([i2, v], i=i_m2))
+selected = [
+    [4, 12, 1],
+    [6, 9, 1],
+    [7, 4, 1],
+]
+for s in selected:
+    i = hr.load('data-rev/silicone/Sylguard_II_III_20201109.dat', s)[0]
+    if cached:
+        iv_i2s.append(np.loadtxt('out/manual-2-%s/i_s.txt' % s[0]))
+        iv_v2s.append(np.loadtxt('out/manual-2-%s/v_s.txt' % s[0]))
+        iv_tau2s.append(np.loadtxt('out/manual-2-%s/tau_s.txt' % s[0]))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t2, out='manual-2-%s' % s[0])
+        iv_i2s.append(ivi)
+        iv_v2s.append(ivv)
+        iv_tau2s.append(ivt)
+    liv_i2s.append(compute_leak([i, v], i=i_m2))
+
+
+iv_i3s, iv_v3s, iv_tau3s = [], [], []
+liv_i3s = []
+if cached:
+    iv_i3s.append(np.loadtxt('out/manual-3/i_s.txt'))
+    iv_v3s.append(np.loadtxt('out/manual-3/v_s.txt'))
+    iv_tau3s.append(np.loadtxt('out/manual-3/tau_s.txt'))
+else:
+    ivi, ivv, ivt = estimate_iv.get_iv(i3, v, t3, out='manual-3')
+    iv_i3s.append(ivi)
+    iv_v3s.append(ivv)
+    iv_tau3s.append(ivt)
+liv_i3s.append(compute_leak([i3, v]))
+selected = [
+    [4, 17, 0],  # or 1 TODO!
+    [6, 14, 0],  # Nice!
+    [7, 6, 0],
+]
+for s in selected:
+    i = hr.load('data-rev/silicone/Sylguard_II_III_20201109.dat', s)[0]
+    if cached:
+        iv_i3s.append(np.loadtxt('out/manual-3-%s/i_s.txt' % s[0]))
+        iv_v3s.append(np.loadtxt('out/manual-3-%s/v_s.txt' % s[0]))
+        iv_tau3s.append(np.loadtxt('out/manual-3-%s/tau_s.txt' % s[0]))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t3, out='manual-3-%s' % s[0])
+        iv_i3s.append(ivi)
+        iv_v3s.append(ivv)
+        iv_tau3s.append(ivt)
+    liv_i3s.append(compute_leak([i, v]))
+
 
 # Plot
 fig = plt.figure(figsize=(8, 4))
@@ -141,11 +203,15 @@ axes[2, 0].set_xticks([])
 axes[2, 0].text(-0.2, 0.85, '(II)', transform=axes[2, 0].transAxes, size=12,
         weight='bold')
 
+if True:
+    i3 = hr.load('data-rev/silicone/Sylguard_II_III_20201109.dat', [6, 14, 0])[0]
+    traces3 = [i3, v]
+
 axes[3, 0] = fig.add_subplot(grid[5:7, :3])
 axes[3, 0].plot(t3, i3, c='C0')
 axes[3, 0].plot(t3, compute_leak(traces3), c='C1', ls='--')
-axes[3, 0].set_ylim([-1700, 800])
-#axes[3, 0].set_ylim([-1500, 600])
+#axes[3, 0].set_ylim([-1700, 800])
+axes[3, 0].set_ylim([-400, 210])
 axes[3, 0].set_xlim([t3[0], t3[-1]])
 axes[3, 0].text(-0.2, 0.85, '(III)', transform=axes[3, 0].transAxes, size=12,
         weight='bold')
@@ -192,21 +258,35 @@ axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[1, 1].set_xticks([])
 
 axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
-niv_i2 = normalise_by(iv_i2, compute_leak(traces2, i=i_m2))
-axes[2, 1].plot(np.round(iv_v2), niv_i2, 'x', c='C0')
-iv_i, iv_v = compute_leak_iv(traces2, i=i_m2)
-iv_i = normalise_by(iv_i, compute_leak(traces2, i=i_m2))
+#niv_i2 = normalise_by(iv_i2, compute_leak(traces2, i=i_m2))
+#axes[2, 1].plot(np.round(iv_v2), niv_i2, 'x', c='C0')
+#iv_i, iv_v = compute_leak_iv(traces2, i=i_m2)
+#iv_i = normalise_by(iv_i, compute_leak(traces2, i=i_m2))
+niv_i2s = []
+for iv_v, iv_i, li in zip(iv_v2s, iv_i2s, liv_i2s):
+    niv_i2s.append(normalise_by(iv_i, li))
+boxplot(np.array(niv_i2s), np.round(iv_v2s[0]), axes[2, 1])
+iv_i, iv_v = compute_leak_iv([liv_i2s[0], v], i=i_m2)
+iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[2, 1].set_xticks([])
 
 axes[3, 1] = fig.add_subplot(grid[5:7, 3:])
-niv_i3 = normalise_by(iv_i3, compute_leak(traces3))
-axes[3, 1].plot(np.round(iv_v3), niv_i3, 'x', c='C0')
-iv_i, iv_v = compute_leak_iv(traces3)
-iv_i = normalise_by(iv_i, compute_leak(traces3))
+#niv_i3 = normalise_by(iv_i3, compute_leak(traces3))
+#axes[3, 1].plot(np.round(iv_v3), niv_i3, 'x', c='C0')
+#iv_i, iv_v = compute_leak_iv(traces3)
+#iv_i = normalise_by(iv_i, compute_leak(traces3))
+niv_i3s = []
+for iv_v, iv_i, li in zip(iv_v3s, iv_i3s, liv_i3s):
+    niv_i3s.append(normalise_by(iv_i, li))
+boxplot(np.array(niv_i3s), np.round(iv_v3s[0]), axes[3, 1])
+iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
+iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[3, 1].set_xlim([iv_v[0], iv_v[-1]])
+axes[3, 1].set_xticks([-120, -80, -40, 0, 40])
+axes[3, 1].set_xticklabels([-120, -80, -40, 0, 40])
 
 axes[-1, 1].set_xlabel('Voltage (mV)', fontsize=12)
 
