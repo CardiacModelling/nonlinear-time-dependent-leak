@@ -263,8 +263,6 @@ boxplot(np.array(niv_i1s), np.round(iv_v1s[0]), axes[1, 1])
 iv_i, iv_v = compute_leak_iv([liv_i1s[0], v])
 iv_i = normalise_by(iv_i, liv_i1s[0])
 axes[1, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[1, 1].set_xticks([])
 
 axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
 niv_i2s = []
@@ -274,8 +272,6 @@ boxplot(np.array(niv_i2s), np.round(iv_v2s[0]), axes[2, 1])
 iv_i, iv_v = compute_leak_iv([liv_i2s[0], v])
 iv_i = normalise_by(iv_i, liv_i2s[0])
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[2, 1].set_xticks([])
 
 axes[3, 1] = fig.add_subplot(grid[5:7, 3:])
 niv_i3s = []
@@ -285,8 +281,6 @@ boxplot(np.array(niv_i3s), np.round(iv_v3s[0]), axes[3, 1])
 iv_i, iv_v = compute_leak_iv([liv_i3s[0], v])
 iv_i = normalise_by(iv_i, liv_i3s[0])
 axes[3, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[3, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[3, 1].set_xticks([])
 
 axes[4, 1] = fig.add_subplot(grid[7:9, 3:])
 niv_i4s = []
@@ -296,8 +290,6 @@ boxplot(np.array(niv_i4s), np.round(iv_v4s[0]), axes[4, 1])
 iv_i, iv_v = compute_leak_iv([liv_i4s[0], v])
 iv_i = normalise_by(iv_i, liv_i4s[0])
 axes[4, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[4, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[4, 1].set_xticks([])
 
 axes[5, 1] = fig.add_subplot(grid[9:11, 3:])
 niv_i5s = []
@@ -307,9 +299,18 @@ boxplot(np.array(niv_i5s), np.round(iv_v5s[0]), axes[5, 1])
 iv_i, iv_v = compute_leak_iv([liv_i5s[0], v])
 iv_i = normalise_by(iv_i, liv_i5s[0])
 axes[5, 1].plot(iv_v, iv_i, c='C1', ls='--')
-axes[5, 1].set_xlim([iv_v[0], iv_v[-1]])
-axes[5, 1].set_xticks([-120, -80, -40, 0, 40])
-axes[5, 1].set_xticklabels([-120, -80, -40, 0, 40])
+
+for i in range(1, 6):
+    #axes[i, 1].set_ylim([-0.5, 4.5])
+    #axes[i, 1].set_yticks([0, 2, 4])
+    #axes[i, 1].set_yticklabels([r'$0$', r'$2$', r'$4$'])
+    axes[i, 1].grid(lw=1, alpha=0.4)
+    axes[i, 1].set_xlim([-160, 80])
+    axes[i, 1].set_xticks([-120, -80, -40, 0, 40])
+    if i != 5:
+        axes[i, 1].set_xticklabels([])
+    else:
+        axes[i, 1].set_xticklabels([r'$-120$', r'$-80$', r'$-40$', r'$0$', r'$40$'])
 
 axes[-1, 1].set_xlabel('Voltage (mV)', fontsize=12)
 
