@@ -13,17 +13,18 @@ pip install -r requirements.txt
 ```
 
 ## Results
-- [Figure 2](fig/patch-auto.pdf): Run `patch-auto.py`.
-- [Figure 3](fig/patch-manual.pdf): Run `patch-manual.py`.
+- [Figure 2](fig/figure-2.pdf): Run `figure-2.py`.
+- [Figure 3](fig/figure-3.pdf): Run `figure-3.py`.
+- [Figure 4](fig/figure-4.pdf): Run `figure-4.py`.
 
 ## Folders
 - [method](./method): Contains all modules/utility functions.
-- [data](./data): Contains all experimental data and protocols, the individual data files are described in a readme in this folder and there is an associated licence.
+- [data](./data) and [data-rev](./data-rev): Contains all experimental data and protocols, the individual data files are described in a README in this folder and there is an associated licence.
 - [fig](./fig): All result figures.
 - [out](./out): Contains all fitting results.
 
 ## License
-All the data provided in this repository within the [data](./data) directory are distributed under a [Creative Commons Attribution 4.0 International License](./data/LICENSE.txt).
+All the data provided in this repository within the [data](./data) and [data-rev](./data-rev) directory are distributed under a [Creative Commons Attribution 4.0 International License](./data/LICENSE.txt).
 The rest of the code in this repository are under a [BSD 3-Clause License](./LICENSE.txt).
 
 ## Acknowledging this work
