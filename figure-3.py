@@ -110,6 +110,27 @@ for s in selected:
         iv_v4s.append(ivv)
         iv_tau4s.append(ivt)
 
+iv_i5s, iv_v5s, iv_tau5s = [], [], []
+liv_i5s = []
+f5s = 'data-rev/no-cell/selected-nocell.txt'
+selected = []
+with open(f5s, 'r') as f:
+    for l in f:
+        if not l.startswith('#'):
+            selected.append(l.split()[0])
+for s in selected:
+    f = 'data-rev/no-cell/nocell-staircaseramp-%s-after-sweep2.csv' % s
+    i = np.loadtxt(f, delimiter=',', skiprows=1)
+    if cached:
+        iv_i5s.append(np.loadtxt('out/auto-5-%s/i_s.txt' % s))
+        iv_v5s.append(np.loadtxt('out/auto-5-%s/v_s.txt' % s))
+        iv_tau5s.append(np.loadtxt('out/auto-5-%s/tau_s.txt' % s))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-5-%s' % s)
+        iv_i5s.append(ivi)
+        iv_v5s.append(ivv)
+        iv_tau5s.append(ivt)
+
 iv_i6s, iv_v6s, iv_tau6s = [], [], []
 liv_i6s = []
 selected = [
@@ -214,10 +235,11 @@ list_iv_taus = [np.array(iv_tau1s)[:, 0],
                 np.array(iv_tau2s)[:, 0],
                 np.array(iv_tau3s)[:, 0],
                 np.array(iv_tau4s)[:, 0],
+                np.array(iv_tau5s)[:, 0],
                 np.array(iv_tau6s)[:, 0],]
 for i, x in enumerate(list_iv_taus):
     list_iv_taus[i] = x[~np.isnan(x)]
-list_labels = ['A', 'B', 'C', 'D', 'I']
+list_labels = ['A', 'B', 'C', 'D', 'E', 'I']
 ''' # Histograms
 bins = np.linspace(50, 1250, 20)
 def hist(values, label, c, ax):

@@ -144,12 +144,27 @@ for s in selected:
         iv_tau4s.append(ivt)
     liv_i4s.append(compute_leak([i, v]))
 
-if cached:
-    iv_i5 = np.loadtxt('out/auto-5/i_s.txt')
-    iv_v5 = np.loadtxt('out/auto-5/v_s.txt')
-    iv_tau5 = np.loadtxt('out/auto-5/tau_s.txt')
-else:
-    iv_i5, iv_v5, iv_tau5 = estimate_iv.get_iv(i5, v, t, out='auto-5')
+iv_i5s, iv_v5s, iv_tau5s = [], [], []
+liv_i5s = []
+f5s = 'data-rev/no-cell/selected-nocell.txt'
+selected = []
+with open(f5s, 'r') as f:
+    for l in f:
+        if not l.startswith('#'):
+            selected.append(l.split()[0])
+for s in selected:
+    f = 'data-rev/no-cell/nocell-staircaseramp-%s-after-sweep2.csv' % s
+    i = np.loadtxt(f, delimiter=',', skiprows=1)
+    if cached:
+        iv_i5s.append(np.loadtxt('out/auto-5-%s/i_s.txt' % s))
+        iv_v5s.append(np.loadtxt('out/auto-5-%s/v_s.txt' % s))
+        iv_tau5s.append(np.loadtxt('out/auto-5-%s/tau_s.txt' % s))
+    else:
+        ivi, ivv, ivt = estimate_iv.get_iv(i, v, t, out='auto-5-%s' % s)
+        iv_i5s.append(ivi)
+        iv_v5s.append(ivv)
+        iv_tau5s.append(ivt)
+    liv_i5s.append(compute_leak([i, v]))
 
 # Plot
 fig = plt.figure(figsize=(8, 6))
@@ -285,12 +300,16 @@ axes[4, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[4, 1].set_xticks([])
 
 axes[5, 1] = fig.add_subplot(grid[9:11, 3:])
-niv_i5 = normalise_by(iv_i5, compute_leak(traces5))
-axes[5, 1].plot(np.round(iv_v5), niv_i5, 'x', c='C0')
-iv_i, iv_v = compute_leak_iv(traces5)
-iv_i = normalise_by(iv_i, compute_leak(traces5))
+niv_i5s = []
+for iv_v, iv_i, li in zip(iv_v5s, iv_i5s, liv_i5s):
+    niv_i5s.append(normalise_by(iv_i, li))
+boxplot(np.array(niv_i5s), np.round(iv_v5s[0]), axes[5, 1])
+iv_i, iv_v = compute_leak_iv([liv_i5s[0], v])
+iv_i = normalise_by(iv_i, liv_i5s[0])
 axes[5, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[5, 1].set_xlim([iv_v[0], iv_v[-1]])
+axes[5, 1].set_xticks([-120, -80, -40, 0, 40])
+axes[5, 1].set_xticklabels([-120, -80, -40, 0, 40])
 
 axes[-1, 1].set_xlabel('Voltage (mV)', fontsize=12)
 
