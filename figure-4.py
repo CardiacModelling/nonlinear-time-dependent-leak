@@ -29,6 +29,7 @@ def compute_leak_iv(traces, i=[15000, 16250, 18000, 19250]):
   v = np.linspace(-160, 80, 100)
   return m * v + c, v
 
+i_m2 = [38250, 39000, 40000, 40750]
 
 savedir = 'fig'
 if not os.path.isdir(savedir):
@@ -132,7 +133,7 @@ axes[1, 0].text(-0.2, 0.85, '(I)', transform=axes[1, 0].transAxes, size=12,
 
 axes[2, 0] = fig.add_subplot(grid[3:5, :3])
 axes[2, 0].plot(t2, i2, c='C0')
-axes[2, 0].plot(t2, compute_leak(traces2, i=[38250, 39000, 40000, 40750]),
+axes[2, 0].plot(t2, compute_leak(traces2, i=i_m2),
                 c='C1', ls='--')
 axes[2, 0].set_ylim([-400, 210])
 axes[2, 0].set_xlim([t2[0], t2[-1]])
@@ -191,10 +192,10 @@ axes[1, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[1, 1].set_xticks([])
 
 axes[2, 1] = fig.add_subplot(grid[3:5, 3:])
-niv_i2 = normalise_by(iv_i2, compute_leak(traces2, i=[38250, 39000, 40000, 40750]))
+niv_i2 = normalise_by(iv_i2, compute_leak(traces2, i=i_m2))
 axes[2, 1].plot(np.round(iv_v2), niv_i2, 'x', c='C0')
-iv_i, iv_v = compute_leak_iv(traces2, i=[38250, 39000, 40000, 40750])
-iv_i = normalise_by(iv_i, compute_leak(traces2, i=[38250, 39000, 40000, 40750]))
+iv_i, iv_v = compute_leak_iv(traces2, i=i_m2)
+iv_i = normalise_by(iv_i, compute_leak(traces2, i=i_m2))
 axes[2, 1].plot(iv_v, iv_i, c='C1', ls='--')
 axes[2, 1].set_xlim([iv_v[0], iv_v[-1]])
 axes[2, 1].set_xticks([])
