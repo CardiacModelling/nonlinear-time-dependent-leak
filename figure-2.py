@@ -14,11 +14,14 @@ else:
     seed = 0
 np.random.seed(seed)
 
+ELEAK = []
+
 def compute_leak(traces, i=[15000, 16250, 18000, 19250]):
   ya = np.mean(traces[0][i[0]:i[1]]); yb = np.mean(traces[0][i[2]:i[3]])
   xa = np.mean(traces[1][i[0]:i[1]]); xb = np.mean(traces[1][i[2]:i[3]])
   m = (ya - yb) / (xa - xb)
   c = ya - m * xa
+  ELEAK.append(- c / m)
   return m * traces[1] + c
 
 def compute_leak_iv(traces, i=[15000, 16250, 18000, 19250]):
@@ -321,5 +324,8 @@ plt.savefig('%s/figure-2.png' % savedir, bbox_inches='tight', pad_inches=0,
         dpi=200)
 plt.savefig('%s/figure-2.pdf' % savedir, bbox_inches='tight', pad_inches=0,
         format='pdf')
+
+# print('ELeak =', np.mean(ELEAK), '+/-', np.std(ELEAK) / np.sqrt(len(ELEAK)))
+np.savetxt('out/eleak-fig2.txt', ELEAK)
 
 print('Done')
