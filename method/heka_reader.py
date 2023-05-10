@@ -1,5 +1,7 @@
 """
-Heka Patchmaster .dat file reader 
+Heka Patchmaster .dat file reader
+
+https://github.com/campagnola/heka_reader
 
 Structure definitions adapted from StimFit hekalib.cpp
 
